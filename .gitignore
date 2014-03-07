@@ -1,2 +1,4 @@
 simu/
 SoCKit_golden_top/
+src/*.bak/
+tb_src/*.bak/
