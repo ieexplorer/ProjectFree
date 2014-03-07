@@ -1,5 +1,5 @@
 module RESET #(parameter enable_state =0)
-  (input logic CLK, input logic PLL_LOCK,input logic RST_in, output logic RST_out);
+  (input logic CLK, input logic RST_in, output logic RST_out);
 
    logic n_rst_in1;
    logic n_rst_in2;

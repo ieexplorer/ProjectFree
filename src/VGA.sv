@@ -1,18 +1,19 @@
 module VGA #(parameter HDISP = 640, VDISP = 480)
    (input logic clk, 
- input logic 	    rst,
- input logic		 VGA_EN,
- output logic 	    VGA_CLK,
- output logic 	    VGA_HS,
- output logic 	    VGA_VS, 
- output logic 	    VGA_BLANK, 
- output logic 	    VGA_SYNC, 
- output logic [7:0] VGA_R, 
- output logic [7:0] VGA_G, 
- output logic [7:0] VGA_B,
- input logic [7:0] RAM_DATA,
- input logic [7:0] ROM_DATA,
- output logic [15:0] RAM_ADDR);
+	input logic PLL_LOCK,
+	input logic 	    rst,
+	input logic		 VGA_EN,
+	output logic 	    VGA_CLK,
+	output logic 	    VGA_HS,
+	output logic 	    VGA_VS, 
+	output logic 	    VGA_BLANK, 
+	output logic 	    VGA_SYNC, 
+	output logic [7:0] VGA_R, 
+	output logic [7:0] VGA_G, 
+	output logic [7:0] VGA_B,
+	input logic [7:0] RAM_DATA,
+	input logic [7:0] ROM_DATA,
+	output logic [15:0] RAM_ADDR);
 // VGA_SYNC Useless 
 	assign VGA_SYNC = 0;
 //Clock for the VGA, replaced by pll

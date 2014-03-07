@@ -1,6 +1,7 @@
 module CONTROL #(parameter D_WIDTH=8,
 									A_WIDTH=16)
-					(input logic CLK, 
+					(input logic CLK,
+					input logic PLL_LOCK,	
 					input logic RST,
 					input logic [A_WIDTH-1 : 0] VGA_ADDR,
 					output logic VGA_EN,

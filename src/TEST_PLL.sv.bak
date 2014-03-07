@@ -1,7 +1,4 @@
-module TEST_PLL(input logic clk,
-					input logic PLL_LOCK,
-					input logic nrst, 
-					output logic led);
+module TEST_PLL(input logic clk, input logic nrst, output logic led);
 logic [27 : 0] diviser;
 	always_ff @(posedge clk)
 		if(!nrst) diviser <='0;
