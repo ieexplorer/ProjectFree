@@ -11,6 +11,7 @@ module VGA #(parameter HDISP = 640, VDISP = 480)
  output logic [7:0] VGA_G, 
  output logic [7:0] VGA_B,
  input logic [7:0] RAM_DATA,
+ input logic [7:0] ROM_DATA,
  output logic [15:0] RAM_ADDR);
 // VGA_SYNC Useless 
 	assign VGA_SYNC = 0;
@@ -73,7 +74,7 @@ module VGA #(parameter HDISP = 640, VDISP = 480)
 
 //Address for the IMAGE_RAM
 
-	assign RAM_ADDR = {counter_line[7:0], counter_pixel[7:0] };
+	assign RAM_ADDR = {counter_line[7:0], counter_pixel[7:0] } +1'b1;
 	
 // Generation for signal VGA_HS
    always_ff @(posedge VGA_CLK )
@@ -103,30 +104,33 @@ module VGA #(parameter HDISP = 640, VDISP = 480)
 					  					 
      always_ff @(posedge VGA_CLK or posedge rst_intern )
 				       	 if(rst_intern) VGA_R <='0;
-					 else if(counter_pixel < IMAGE_PIXEL_st+1 | counter_pixel > IMAGE_PIXEL_end+1)VGA_R <= '0;
-					    else if(counter_line < IMAGE_LINE_st+1 | counter_line > IMAGE_LINE_end+1) VGA_R <= '0;
+					 else if(counter_pixel < IMAGE_PIXEL_st | counter_pixel > IMAGE_PIXEL_end-1)VGA_R <='0;
+					    else if(counter_line < IMAGE_LINE_st | counter_line > IMAGE_LINE_end) VGA_R <= '0;
 					         else 
-											VGA_R <= RAM_DATA;
+									if(counter_pixel < IMAGE_PIXEL_BON)	VGA_R <= RAM_DATA;
+									else VGA_R <= ROM_DATA;
 										
 				
  // Generation for signal VGA_GREEN
 					  					 
      always_ff @(posedge VGA_CLK or posedge rst_intern )
 				       	 if(rst_intern) VGA_G<='0;
-					 else if(counter_pixel < IMAGE_PIXEL_st+1 | counter_pixel > IMAGE_PIXEL_end+1)VGA_G <= '0;
-					    else if(counter_line < IMAGE_LINE_st+1 | counter_line > IMAGE_LINE_end+1) VGA_G <= '0;
+					 else if(counter_pixel < IMAGE_PIXEL_st | counter_pixel > IMAGE_PIXEL_end-1)VGA_G <= '0;
+					    else if(counter_line < IMAGE_LINE_st | counter_line > IMAGE_LINE_end) VGA_G <= '0;
 					         else 
-											VGA_G <= RAM_DATA;
+									if(counter_pixel < IMAGE_PIXEL_BON)	VGA_G <= RAM_DATA;
+									else VGA_G <= ROM_DATA;
 										
 					
  // Generation for signal VGA_BLEU
 					  					 
       always_ff @(posedge VGA_CLK or posedge rst_intern )
 				       	 if(rst_intern) VGA_B <='0;
-					 else if(counter_pixel < IMAGE_PIXEL_st+1 | counter_pixel > IMAGE_PIXEL_end+1)VGA_B <= '0;
-					    else if(counter_line < IMAGE_LINE_st+1 | counter_line > IMAGE_LINE_end+1) VGA_B<= '0;
+					 else if(counter_pixel < IMAGE_PIXEL_st | counter_pixel > IMAGE_PIXEL_end)VGA_B <= 8'd128;
+					    else if(counter_line < IMAGE_LINE_st | counter_line > IMAGE_LINE_end) VGA_B<= 8'd128;
 					         else 
-											VGA_B <= RAM_DATA;
+									if(counter_pixel < IMAGE_PIXEL_BON)	VGA_B <= RAM_DATA;
+									else VGA_B <= ROM_DATA;
 										
 				
 endmodule 

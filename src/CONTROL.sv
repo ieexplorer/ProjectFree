@@ -4,7 +4,8 @@ module CONTROL #(parameter D_WIDTH=8,
 					input logic RST,
 					input logic [A_WIDTH-1 : 0] VGA_ADDR,
 					output logic VGA_EN,
-					output logic [D_WIDTH-1 : 0] VGA_DATA
+					output logic [D_WIDTH-1 : 0] VGA_DATA,
+					output logic [D_WIDTH-1 : 0] VGA_DATA_N
 					);
 		localparam A_WIDTH_HALF = A_WIDTH / 2;
 	// adress for counter test
@@ -25,7 +26,7 @@ module CONTROL #(parameter D_WIDTH=8,
 									  .address(rom_addr),
 									  .q(rom_data_out)
 									  );
-	
+		assign VGA_DATA_N = rom_data_out;
 	//States 
 	enum logic[2:0]{idle,write_direct,filter_charge,result_wait,write_filter,finish} cstate,nstate;
 	// RAM for the photo after filter
@@ -158,7 +159,8 @@ module CONTROL #(parameter D_WIDTH=8,
 									endcase
 									end
 						    else 
-								rom_addr <= address_count;
+								if(nstate == finish) rom_addr <= VGA_ADDR;
+								else	rom_addr <= address_count;
 				//VGA_EN
 				always_ff @(posedge CLK or posedge RST)
 					if(RST) VGA_EN <= 0;
